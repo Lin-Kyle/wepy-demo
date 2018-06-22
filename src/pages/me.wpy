@@ -1,0 +1,69 @@
+<style type="less">
+.person_info {
+    text-align: center;
+    image {
+        width: 180rpx;
+        height: 180rpx;
+        margin: 20rpx 0;
+        border-radius: 100%;
+        box-shadow: 1px 1px 3px #666;
+    }
+}
+</style>
+<template>
+<view class='show_list person_info'>
+    <view class="section__ctn">
+        <image src="{{info.src}}"></image>
+    </view>
+    <view style="margin-bottom:20rpx">{{info.name}}</view>
+    <view style='font-size:20px'>{{Integral}}</view>
+    <view style='font-size:10px'>我的积分</view>
+</view>
+<view class='show_list'>My Info</view>
+<view class='show_list'>History order</view>
+<view class='show_list'>Integral Detail</view>
+<!--wxml-->
+<!-- 如果只是展示用户头像昵称，可以使用 <open-data /> 组件 -->
+<open-data type="userAvatarUrl"></open-data>
+<open-data type="userNickName"></open-data>
+<!-- 需要使用 button 来授权登录 -->
+<button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+<view wx:else>请升级微信版本</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Index extends wepy.page {
+
+    data = {
+        info: {
+            name: 'abc',
+            src: '../img/20141126213826_BCTnH.jpeg'
+        },
+        Integral: 265,
+        canIUse: wx.canIUse('button.open-type.getUserInfo')
+    }
+
+    bindGetUserInfo(e) {
+        console.log(e.detail.userInfo)
+    }
+
+    onLoad() {
+        /*console.log('查看是否授权');
+        wx.getSetting({
+            success: function(res) {
+                console.log('getSetting');
+                if (res.authSetting['scope.userInfo']) {
+                    // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+                    wx.getUserInfo({
+                        success: function(res) {
+                            console(res.userInfo)
+                        }
+                    })
+                }
+            }
+        })*/
+    }
+}
+</script>

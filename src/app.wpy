@@ -1,0 +1,141 @@
+<style lang="less">
+page {
+    background-color: #ccc;
+}
+.show_list {
+    margin-top: 20rpx;
+    padding: 25rpx;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+}
+</style>
+
+<script>
+import wepy from 'wepy';
+import 'wepy-async-function';
+import configStore from './store'
+import {
+    setStore,
+    connect
+} from 'wepy-redux'
+
+const store = configStore()
+setStore(store)
+// action
+import {
+    userinfo
+} from './store/actions'
+
+@connect({
+    userinfo: state => state.user.userinfo
+}, {
+    userinfo
+})
+export default class extends wepy.app {
+
+    config = {
+        'pages': [
+            'pages/me',
+            'pages/order',
+            'pages/get',
+            'pages/index',
+            'example/index',
+            'example/button',
+            'example/list',
+            'example/input',
+            'example/slider',
+            'example/uploader',
+
+            'example/article',
+            'example/badge',
+            'example/flex',
+            'example/footer',
+            'example/gallery',
+            'example/grid',
+            'example/icons',
+            'example/loadmore',
+            'example/panel',
+            'example/preview',
+            'example/progress',
+
+            'example/actionsheet',
+            'example/dialog',
+            'example/msg',
+            'example/msg_fail',
+            'example/msg_success',
+            'example/picker',
+            'example/toast',
+
+        ],
+        'window': {
+            'navigationBarTextStyle': 'black',
+            'navigationBarTitleText': 'WeUI in WePY',
+            'navigationBarBackgroundColor': '#f8f8f8',
+            'backgroundColor': '#f8f8f8'
+        },
+        'networkTimeout': {
+            'request': 10000,
+            'connectSocket': 10000,
+            'uploadFile': 10000,
+            'downloadFile': 10000
+        },
+        'tabBar': {
+            'backgroundColor': '#333333',
+            'selectedColor': '#fff',
+            'list': [{
+                    'text': 'order',
+                    'iconPath': 'img/plan.png',
+                    'selectedIconPath': 'img/plan-on.png',
+                    'pagePath': 'pages/order',
+                },
+                {
+                    'text': 'get',
+                    'iconPath': 'img/bill.png',
+                    'selectedIconPath': 'img/bill-on.png',
+                    'pagePath': 'pages/get',
+                },
+                {
+                    'text': 'me',
+                    'iconPath': 'img/me.png',
+                    'selectedIconPath': 'img/me-on.png',
+                    'pagePath': 'pages/me',
+                }
+            ]
+        }
+    }
+
+    constructor() {
+        super();
+        this.use('promisify');
+        this.use('requestfix');
+
+    }
+
+    globalData = {
+        userInfo: null
+    }
+
+    getUserInfo(cb) {
+        const that = this
+        console.log(this.globalData.userInfo);
+        if (this.globalData.userInfo) {
+            return this.globalData.userInfo
+        }
+        wx.getUserInfo({
+            success(res) {
+                console.log(res);
+                that.globalData.userInfo = res.userInfo
+                cb && cb(res.userInfo)
+            }
+        })
+    }
+
+    onLaunch() {
+        this.methods.userinfo({
+            name: '登录者名称'
+        });
+
+        console.log('登录者名称' + this.$state)
+    }
+}
+</script>
